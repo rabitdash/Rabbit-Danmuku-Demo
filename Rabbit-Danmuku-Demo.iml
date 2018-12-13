@@ -8,5 +8,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="mariadb-java-client-2.2.1" level="project" />
+    <orderEntry type="library" name="tween-engine-api" level="project" />
   </component>
 </module>

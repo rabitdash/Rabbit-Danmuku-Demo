@@ -1,4 +1,7 @@
 package com.rabyte.rabitdash.Prefabs;
 
-public class Enemy {
+import com.rabyte.rabitdash.util.GameObject;
+
+public class Enemy extends GameObject{
+
 }

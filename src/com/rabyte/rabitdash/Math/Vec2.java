@@ -1,9 +1,10 @@
-package com.rabyte.rabitdash.util;
+package com.rabyte.rabitdash.Math;
 import java.lang.Math;
 
 public class Vec2 {
     public double x, y;
-    Vec2()
+
+    public Vec2()
     {
         this.x = 0;
         this.y = 0;
@@ -28,6 +29,10 @@ public class Vec2 {
     Vec2 normalize()
     {
         double length = Math.sqrt(this.x * this.x + this.y * this.y);
+        if(length == 0)
+        {
+            return new Vec2(0,0);
+        }
         return new Vec2(this.x/length, this.y / length);
     }
 }
