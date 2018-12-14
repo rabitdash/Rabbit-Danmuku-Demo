@@ -16,17 +16,21 @@ public class Vec2 {
         this.y = y;
     }
 
-    Vec2 dot(double num)
+    public Vec2 add(Vec2 b)
+    {
+        return new Vec2(this.x + b.x,this.y + b.y);
+    }
+    public Vec2 dot(double num)
     {
         return new Vec2(this.x * num, this.y * num);
     }
 
-    double matmul(Vec2 b)
+    public double matmul(Vec2 b)
     {
         return this.x*b.y - this.y*b.x;
     }
 
-    Vec2 normalize()
+    public Vec2 normalize()
     {
         double length = Math.sqrt(this.x * this.x + this.y * this.y);
         if(length == 0)

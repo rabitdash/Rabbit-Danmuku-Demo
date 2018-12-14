@@ -1,8 +1,20 @@
 package com.rabyte.rabitdash.util;
 
 
-public class GameObject {
+import java.awt.*;
+
+public class GameObject{
     public boolean active = false;
+    //»æÖÆµÄ´°Ìå
+    public Graphics graphics;
+
+    public GameObject() {
+    }
+
+    public GameObject(Graphics graphics) {
+        this.graphics = graphics;
+    }
+
     @Override
     public int hashCode() {
         return super.hashCode();

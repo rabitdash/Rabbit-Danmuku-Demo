@@ -30,6 +30,7 @@ public class BulletPool {
         for (Bullet e :
                 bullets) {
             if (!e.active) {
+                e.active = true;
                 return e;
             }
         }
