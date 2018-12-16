@@ -31,19 +31,22 @@ public class MainMenu {
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("MainMenu");
+        frame.setVisible(false);
 //        frame.setContentPane(new GamePanel());
 //        frame.setContentPane(new MainMenu().panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(new GamePanel());
-
+        GamePanel gamePanel = new GamePanel();
+        gamePanel.setVisible(false);
+        frame.add(gamePanel);
         //´°¿Ú¾ÓÖÐ
         frame.setBounds(
             (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() - Constants.WINDOW_WIDTH) / 2,
             (int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() - Constants.WINDOW_HEIGHT) / 2,
             Constants.WINDOW_WIDTH,
             Constants.WINDOW_HEIGHT);
-
         frame.setVisible(true);
+        gamePanel.setVisible(true);
+
 
     }
 

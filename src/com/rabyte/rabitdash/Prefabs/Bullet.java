@@ -1,42 +1,87 @@
 package com.rabyte.rabitdash.Prefabs;
 
+import com.rabyte.rabitdash.Drawable;
+import com.rabyte.rabitdash.ITraceFunc;
+import com.rabyte.rabitdash.util.Collidable;
 import com.rabyte.rabitdash.util.GameObject;
 import com.rabyte.rabitdash.Math.Vec2;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class Bullet extends GameObject{
+public class Bullet extends GameObject implements Drawable, Collidable {
+    public static final int IMAGE_WIDTH = 200;
+    public static final int IMAGE_HEIGHT = 200;
     public Vec2 pos;
-    public int life = 3000;//存活寿命，多少帧，寿命=0则active=false，存入子弹对象池
+    public double collideSize;//碰撞体积
+    public int life = 300;//存活寿命，多少帧，寿命=0则active=false，存入子弹对象池
+    public int frame = 0;//已存活的帧数
+    public ITraceFunc traceFunc;//运动轨迹
+    public Vec2 direction;//朝向方向 TODO
     Image image;
 
     public Bullet() {
         super();
-    }
-
-    public Bullet(Graphics g) {
-        super(g);
         pos = new Vec2();
-        active = false;
-    }
-
-    public Bullet(Graphics g, Vec2 position) {
-        super(g);
-        this.pos = position;
-        active = false;
         image = new ImageIcon("C:\\Users\\dswxl\\Desktop\\remu.jpg").getImage();
     }
 
-    public void draw()
-    {
-        this.graphics.drawOval((int)pos.x,(int)pos.y,20,20);
+    public Bullet(@NotNull Graphics g) {
+        super(g);
+        pos = new Vec2();
+        //TODO 将图片资源获取包装成类
+        image = new ImageIcon("C:\\Users\\dswxl\\Desktop\\remu.jpg").getImage();
+        active = false;
     }
 
-    public void draw(Graphics g)
-    {
-//        g.drawOval((int)pos.x,(int)pos.y,20,20);
-        g.drawImage(image,(int)pos.x,(int)pos.y,200,200,null);
+//    public Bullet(Graphics g, Vec2 position) {
+//        super(g);
+//        active = false;
+//        image = new ImageIcon("C:\\Users\\dswxl\\Desktop\\remu.jpg").getImage();
+//        //转化Anchor，从左上角到中央
+//        this.pos = position.add(new Vec2(-IMAGE_WIDTH / 2.0, -IMAGE_HEIGHT / 2.0));
+//    }
+
+    public Vec2 getPos() {
+        return pos.add(new Vec2(IMAGE_WIDTH / 2.0, IMAGE_HEIGHT / 2.0));
+    }
+
+    public void setPos(Vec2 pos) {
+        this.pos = pos.add(new Vec2(-IMAGE_WIDTH / 2.0, -IMAGE_HEIGHT / 2.0));
+    }
+
+    public void draw() {
+        //保存先前颜色
+        Color c = graphics.getColor();
+        if (life <= 0) {
+            this.active = false;
+        } else {
+//            graphics.drawImage(image, (int) pos.x, (int) pos.y, 200, 200, null);
+            graphics.setColor(Color.RED);
+            graphics.drawOval((int) pos.x, (int) pos.y, 20, 20);
+            pos = pos.add(traceFunc.getTrace(frame));
+            life--;
+            frame++;
+//            System.out.println(pos.x + " " + pos.y);
+        }
+        //颜色恢复
+        graphics.setColor(c);
+    }
+
+    @Override
+    public boolean isCollide(Collidable object) {
+        return this.getPos().minus(object.getPos()).len()
+                < Math.abs(this.getCollideSize() - object.getCollideSize());
+    }
+
+    @Override
+    public void collideEvent() {
+    }
+
+    @Override
+    public double getCollideSize() {
+        return collideSize;
     }
 ////    @Override
 ////    public void run() {

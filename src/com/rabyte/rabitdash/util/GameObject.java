@@ -3,16 +3,16 @@ package com.rabyte.rabitdash.util;
 
 import java.awt.*;
 
-public class GameObject{
-    public boolean active = false;
+public class GameObject {
     //»æÖÆµÄ´°Ìå
-    public Graphics graphics;
+    public static Graphics graphics;
+    public boolean active = false;
 
     public GameObject() {
     }
 
-    public GameObject(Graphics graphics) {
-        this.graphics = graphics;
+    public GameObject(Graphics g) {
+        graphics = g;
     }
 
     @Override
