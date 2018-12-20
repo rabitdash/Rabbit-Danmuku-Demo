@@ -1,6 +1,6 @@
 package com.rabyte.rabitdash.util;
 
-import com.rabyte.rabitdash.Prefabs.Bullet;
+import com.rabyte.rabitdash.Prefabs.FixTraceBullet;
 
 import java.awt.*;
 import java.util.Vector;
@@ -8,21 +8,23 @@ import java.util.Vector;
 //子弹对象池
 public class BulletPool {
     private static final int MAX_BULLET_NUM = 1000;//最大子弹数
-    private static final int INCREASE_SIZE = 100; //空间不足时增加n个子弹对象
+    private static final int INCREASE_SIZE = 200; //空间不足时增加n个子弹对象
     private static BulletPool _instance = null;
-    public static Vector<Bullet> bullets = new Vector<Bullet>();;
+    public static Vector<FixTraceBullet> fixTraceBullets = new Vector<FixTraceBullet>();;
     private int bulletNum = 200;//子弹对象池的大小
+    private static Graphics graphics;
     //singleton
 
     private BulletPool() {
         for (int i = 0; i < bulletNum; ++i) {
-            bullets.addElement(new Bullet());
+            fixTraceBullets.addElement(new FixTraceBullet());
         }
     }
 
     private BulletPool(Graphics g) {
+        graphics = g;
         for (int i = 0; i < bulletNum; ++i) {
-            bullets.addElement(new Bullet(g));
+            fixTraceBullets.addElement(new FixTraceBullet(g));
         }
     }
 
@@ -40,17 +42,17 @@ public class BulletPool {
         return _instance;
     }
 
-    public Bullet getObject() {
+    public FixTraceBullet getObject() {
         //TODO Optimizition required
-        for (Bullet e :
-                bullets) {
+        for (FixTraceBullet e :
+                fixTraceBullets) {
             if (!e.active) {
                 e.active = true;
                 return e;
             }
         }
         if (createObject()) {
-            for (Bullet e : bullets) {
+            for (FixTraceBullet e : fixTraceBullets) {
                 if (!e.active) {
                     e.active = true;
                     return e;
@@ -60,15 +62,29 @@ public class BulletPool {
         return null;
     }
 
-    public Vector<Bullet> getObject(int bulletNum) {
+    public Vector<FixTraceBullet> getObject(int bulletNum) {
         //TODO Optimizition required
-        Vector<Bullet> bulletVector = new Vector<Bullet>();
-        bulletNum = getBulletNum(bulletNum, bulletVector);
+        Vector<FixTraceBullet> fixTraceBulletVector = new Vector<FixTraceBullet>();
+        for (FixTraceBullet e :
+                fixTraceBullets) {
+            if (!e.active && bulletNum > 0) {
+                e.active = true;
+                fixTraceBulletVector.add(e);
+                bulletNum--;
+            }
+        }
         if (createObject()) {
-            bulletNum = getBulletNum(bulletNum, bulletVector);
+            for (FixTraceBullet e :
+                    fixTraceBullets) {
+                if (!e.active && bulletNum > 0) {
+                    e.active = true;
+                    fixTraceBulletVector.add(e);
+                    bulletNum--;
+                }
+            }
         }
         if (bulletNum == 0) {
-            return bulletVector;
+            return fixTraceBulletVector;
         } else
             return null;
     }
@@ -76,24 +92,17 @@ public class BulletPool {
     // auto generated deduplicated code
     // in getObject()
     // so forget about the func name, it doesnt make sense
-    private int getBulletNum(int bulletNum, Vector<Bullet> bulletVector) {
-        for (Bullet e :
-                bullets) {
-            if (!e.active && bulletNum > 0) {
-                e.active = true;
-                bulletVector.add(e);
-                bulletNum--;
-            }
-        }
+    private int getBulletNum(int bulletNum, Vector<FixTraceBullet> fixTraceBulletVector) {
+
         return bulletNum;
     }
 
     public boolean createObject() {
-        if (bullets.size() < MAX_BULLET_NUM) {
+        if (fixTraceBullets.size() < MAX_BULLET_NUM) {
             for (int i = 0; i < INCREASE_SIZE; ++i) {
-                bullets.addElement(new Bullet());
+                fixTraceBullets.addElement(new FixTraceBullet(graphics));
             }
-            System.out.println("create");
+//            System.out.println("create");
             return true;
         } else {
             return false;

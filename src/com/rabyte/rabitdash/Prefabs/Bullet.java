@@ -1,121 +1,50 @@
 package com.rabyte.rabitdash.Prefabs;
 
 import com.rabyte.rabitdash.Drawable;
-import com.rabyte.rabitdash.ITraceFunc;
+import com.rabyte.rabitdash.Math.Vec2;
 import com.rabyte.rabitdash.util.Collidable;
 import com.rabyte.rabitdash.util.GameObject;
-import com.rabyte.rabitdash.Math.Vec2;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class Bullet extends GameObject implements Drawable, Collidable {
-    public static final int IMAGE_WIDTH = 200;
-    public static final int IMAGE_HEIGHT = 200;
+    public static int imageWidth = 10;
+    public static int imageHeight = 10;
     public Vec2 pos;
-    public double collideSize;//ç¢°æ’ä½“ç§¯
-    public int life = 300;//å­˜æ´»å¯¿å‘½ï¼Œå¤šå°‘å¸§ï¼Œå¯¿å‘½=0åˆ™active=falseï¼Œå­˜å…¥å­å¼¹å¯¹è±¡æ± 
-    public int frame = 0;//å·²å­˜æ´»çš„å¸§æ•°
-    public ITraceFunc traceFunc;//è¿åŠ¨è½¨è¿¹
-    public Vec2 direction;//æœå‘æ–¹å‘ TODO
-    Image image;
+    public double collideSize = 114;//Åö×²Ìå»ı
+    public int life = 1000;//´æ»îÊÙÃü£¬¶àÉÙÖ¡£¬ÊÙÃü=0Ôòactive=false£¬´æÈë×Óµ¯¶ÔÏó³Ø
+    public int frame = 0;//ÒÑ´æ»îµÄÖ¡Êı
 
-    public Bullet() {
-        super();
-        pos = new Vec2();
-        image = new ImageIcon("C:\\Users\\dswxl\\Desktop\\remu.jpg").getImage();
-    }
-
-    public Bullet(@NotNull Graphics g) {
-        super(g);
-        pos = new Vec2();
-        //TODO å°†å›¾ç‰‡èµ„æºè·å–åŒ…è£…æˆç±»
-        image = new ImageIcon("C:\\Users\\dswxl\\Desktop\\remu.jpg").getImage();
-        active = false;
-    }
-
-//    public Bullet(Graphics g, Vec2 position) {
-//        super(g);
-//        active = false;
-//        image = new ImageIcon("C:\\Users\\dswxl\\Desktop\\remu.jpg").getImage();
-//        //è½¬åŒ–Anchorï¼Œä»å·¦ä¸Šè§’åˆ°ä¸­å¤®
-//        this.pos = position.add(new Vec2(-IMAGE_WIDTH / 2.0, -IMAGE_HEIGHT / 2.0));
-//    }
-
-    public Vec2 getPos() {
-        return pos.add(new Vec2(IMAGE_WIDTH / 2.0, IMAGE_HEIGHT / 2.0));
-    }
-
-    public void setPos(Vec2 pos) {
-        this.pos = pos.add(new Vec2(-IMAGE_WIDTH / 2.0, -IMAGE_HEIGHT / 2.0));
-    }
-
+    //TODO ½«»æÍ¼ĞĞÎªÓëÔË¶¯¼ÆËã·ÖÀë
+    @Override
     public void draw() {
-        //ä¿å­˜å…ˆå‰é¢œè‰²
-        Color c = graphics.getColor();
-        if (life <= 0) {
-            this.active = false;
-        } else {
-//            graphics.drawImage(image, (int) pos.x, (int) pos.y, 200, 200, null);
-            graphics.setColor(Color.RED);
-            graphics.drawOval((int) pos.x, (int) pos.y, 20, 20);
-            pos = pos.add(traceFunc.getTrace(frame));
-            life--;
-            frame++;
-//            System.out.println(pos.x + " " + pos.y);
-        }
-        //é¢œè‰²æ¢å¤
-        graphics.setColor(c);
+
     }
 
     @Override
     public boolean isCollide(Collidable object) {
+        if (!this.active)
+            return false;
+//        System.out.println(this.getPos().minus(object.getPos()).len());
         return this.getPos().minus(object.getPos()).len()
-                < Math.abs(this.getCollideSize() - object.getCollideSize());
+                < Math.abs(this.getCollideSize() + object.getCollideSize());
     }
 
     @Override
-    public void collideEvent() {
+    public void collideEvent(Collidable object) {
+
     }
 
     @Override
     public double getCollideSize() {
-        return collideSize;
+        return 0;
     }
-////    @Override
-////    public void run() {
-//    if(iBuffer==null)
-//    {
-//        iBuffer=createImage(this.getSize().width,this.getSize().height);
-//        gBuffer=iBuffer.getGraphics();
-//    }
-//            gBuffer.setColor(getBackground());
-//            gBuffer.fillRect(0,0,this.getSize().width,this.getSize().height);
-//            gBuffer.setColor(Color.RED);
-//            gBuffer.fillOval(90+i,90+i,80,80);
-////        long t1, t2, dt, sleepTime;
-////        long peroid = 1000 / 10;
-////        //è®¡ç®—æ¯ä¸€æ¬¡å¾ªç¯éœ€è¦çš„æ‰§è¡Œæ—¶é—´ï¼Œå•ä½ï¼šæ¯«ç§’
-////        t1 = System.nanoTime();
-//////        System.out.println(graphics);
-//////        this.graphics.drawOval((int) pos.x, (int) pos.y, 20, 20);
-////        while (true) {
-////            this.graphics.drawOval((int) pos.x++, (int) pos.y++, 20, 20);
-////            t2 = System.nanoTime();
-////            dt = (t2 - t1) / 1000000L;
-////            sleepTime = peroid - dt;
-////            if (sleepTime <= 0) {        //é˜²æ­¢sleepTimeä¸ºå¤æ•°
-////                sleepTime = 2;
-////            }
-////            try {
-////                Thread.sleep(sleepTime);
-////            } catch (InterruptedException ex) {
-////                t1 = System.nanoTime();
-////                ex.printStackTrace();
-////            }
-////
-////
-////        }
-////    }
+
+    public Vec2 getPos() {
+        return pos.add(new Vec2(imageWidth / 2.0, imageHeight / 2.0));
+    }
+
+    public void setPos(Vec2 pos) {
+        this.pos = pos.add(new Vec2(-imageWidth / 2.0, -imageHeight / 2.0));
+    }
+
+    //image = new ImageIcon(getClass().getResource("/resources/images/test.png"));
 }

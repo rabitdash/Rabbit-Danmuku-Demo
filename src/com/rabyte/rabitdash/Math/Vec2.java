@@ -59,9 +59,13 @@ public class Vec2 {
     //单位为弧度制
     public Vec2 rotate(double rad) {
         double rotateDegree = rad;
-        Mat2 rotationMat = new Mat2();
         Mat2 mat = new Mat2(Math.cos(rotateDegree), -Math.sin(rotateDegree),
                 Math.sin(rotateDegree), Math.cos(rotateDegree));
         return this.matmul(mat);
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(this.x) +" " + String.valueOf(this.y);
     }
 }

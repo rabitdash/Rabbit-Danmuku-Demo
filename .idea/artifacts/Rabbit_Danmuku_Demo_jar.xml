@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Rabbit-Danmuku-Demo:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Rabbit_Danmuku_Demo_jar</output-path>
+    <root id="archive" name="Rabbit-Danmuku-Demo.jar">
+      <element id="module-output" name="Rabbit-Danmuku-Demo" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/annotations-16.0.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/3rdParty/MariaDB Connector J/2.2.1/mariadb-java-client-2.2.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/3rdParty/Universal Tween Engine/tween-engine-api.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

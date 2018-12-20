@@ -37,6 +37,7 @@ public class GetKeys {
             f12 = true;
         if (i == 27)
             esc = true;
+//        System.out.println("key pressed" + i);
     }
 
     public void keyReleased(int i) {
@@ -58,6 +59,7 @@ public class GetKeys {
             f12 = false;
         if (i == 27)
             esc = false;
+//        System.out.println("key released" + i);
     }
 }
 

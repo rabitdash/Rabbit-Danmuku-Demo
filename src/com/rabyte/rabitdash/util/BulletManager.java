@@ -1,9 +1,8 @@
 package com.rabyte.rabitdash.util;
 
 import com.rabyte.rabitdash.Math.Vec2;
-import com.rabyte.rabitdash.Prefabs.Bullet;
+import com.rabyte.rabitdash.Prefabs.FixTraceBullet;
 
-import java.awt.*;
 import java.util.Vector;
 
 //管理并生成子弹
@@ -19,10 +18,10 @@ public class BulletManager {
     //directions 方向确定
     public void RoundDanmuku(int directions, Vec2 pos, int bulletNum)
     {
-        Vector<Bullet> bullets = bulletPool.getObject(bulletNum);
-        for(Bullet bullet: bullets)
+        Vector<FixTraceBullet> fixTraceBullets = bulletPool.getObject(bulletNum);
+        for(FixTraceBullet fixTraceBullet : fixTraceBullets)
         {
-            bullet.pos = pos;
+            fixTraceBullet.pos = pos;
         }
     }
 

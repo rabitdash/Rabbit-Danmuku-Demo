@@ -1,4 +1,4 @@
-package com.rabyte.rabitdash;
+package com.rabyte.rabitdash.util;
 
 import com.rabyte.rabitdash.Math.Vec2;
 

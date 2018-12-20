@@ -36,7 +36,8 @@ public class MainMenu {
 //        frame.setContentPane(new MainMenu().panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         GamePanel gamePanel = new GamePanel();
-        gamePanel.setVisible(false);
+        gamePanel.start();
+        gamePanel.setVisible(true);
         frame.add(gamePanel);
         //´°¿Ú¾ÓÖÐ
         frame.setBounds(
