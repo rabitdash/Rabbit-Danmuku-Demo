@@ -11,14 +11,14 @@ public class BulletManager {
     static BulletPool bulletPool;
     BulletManager()
     {
-        bulletPool = BulletPool.getInstance();
+//        bulletPool = BulletPool.getInstance();
     }
 
     //生成圆形散射弹幕
     //directions 方向确定
     public void RoundDanmuku(int directions, Vec2 pos, int bulletNum)
     {
-        Vector<FixTraceBullet> fixTraceBullets = bulletPool.getObject(bulletNum);
+        Vector<FixTraceBullet> fixTraceBullets = bulletPool.getBullets(bulletNum);
         for(FixTraceBullet fixTraceBullet : fixTraceBullets)
         {
             fixTraceBullet.pos = pos;

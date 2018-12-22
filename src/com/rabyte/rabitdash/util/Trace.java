@@ -13,18 +13,17 @@ public class Trace {
         public Linear(double direction) {
             this.direction = direction;
         }
-
         //        public Linear(Vec2 directionVec2){this.direction = }
         @Override
         public Vec2 getTrace(int frame) {
-            return new Vec2(0, -1)
+            return new Vec2(1, 0)
                     .rotate(direction)
                     .normalize();
         }
 
         @Override
         public Vec2 getReverseTrace(int frame) {
-            return new Vec2(0, 1)
+            return new Vec2(-1, 0)
                     .rotate(direction)
                     .normalize();
         }

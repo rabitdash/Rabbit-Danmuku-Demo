@@ -1,5 +1,7 @@
 package com.rabyte.rabitdash.Math;
 
+import com.rabyte.rabitdash.util.Constants;
+
 import java.lang.Math;
 
 public class Vec2 {
@@ -23,6 +25,10 @@ public class Vec2 {
         return new Vec2(this.x * num, this.y * num);
     }
 
+    public double dot(Vec2 b) {
+        return this.x * b.x + this.y * b.y;
+    }
+
     public Vec2 minus(Vec2 b) {
         return new Vec2(this.x - b.x, this.y - b.y);
     }
@@ -31,8 +37,9 @@ public class Vec2 {
         return this.x * b.y - this.y * b.x;
     }
 
+    //TODO 这是左乘
     public Vec2 matmul(Mat2 mat) {
-        return new Vec2(this.x * mat.a + this.y * mat.c, this.y * mat.b + this.y * mat.d);
+        return new Vec2(mat.a * this.x + mat.b * this.y, mat.c * this.x + mat.d * this.y);
     }
 
     public Vec2 normalize() {
@@ -44,28 +51,36 @@ public class Vec2 {
     }
 
     public double len() {
-        double length = Math.sqrt(this.x * this.x + this.y * this.y);
-        return length;
+        return Math.sqrt(this.x * this.x + this.y * this.y);
     }
 
     //单位为角度制
-    public Vec2 rotate(int degree) {
-        double rotateDegree = 2.0 * Math.PI / (double) degree;
-        Mat2 mat = new Mat2(Math.cos(rotateDegree), -Math.sin(rotateDegree),
-                Math.sin(rotateDegree), Math.cos(rotateDegree));
-        return this.matmul(mat);
-    }
+//    public Vec2 rotate(int degree) {
+//        double rotateDegree = Math.toRadians(degree);
+//        Mat2 mat = new Mat2(Math.cos(rotateDegree), -Math.sin(rotateDegree),
+//                Math.sin(rotateDegree), Math.cos(rotateDegree));
+//        return this.matmul(mat);
+//    }
 
     //单位为弧度制
     public Vec2 rotate(double rad) {
-        double rotateDegree = rad;
-        Mat2 mat = new Mat2(Math.cos(rotateDegree), -Math.sin(rotateDegree),
-                Math.sin(rotateDegree), Math.cos(rotateDegree));
+        Mat2 mat = new Mat2(Math.cos(rad), -Math.sin(rad),
+                Math.sin(rad), Math.cos(rad));
         return this.matmul(mat);
+    }
+
+    //弧度制
+    public double angle(Vec2 b) {
+        //夹角小于180
+        if (this.matmul(b) >= 0) {
+            return Math.acos(this.dot(b) / (this.len() * b.len()));
+        } else {
+            return Math.acos(-this.dot(b) / (this.len() * b.len()));
+        }
     }
 
     @Override
     public String toString() {
-        return String.valueOf(this.x) +" " + String.valueOf(this.y);
+        return this.x + " " + this.y;
     }
 }

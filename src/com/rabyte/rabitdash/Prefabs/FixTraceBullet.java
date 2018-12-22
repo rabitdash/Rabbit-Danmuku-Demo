@@ -9,15 +9,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.time.LocalTime;
 
-public class FixTraceBullet extends GameObject implements Drawable, Collidable {
+public class FixTraceBullet extends Bullet implements Drawable, Collidable {
     public static final int IMAGE_WIDTH = 10;
     public static final int IMAGE_HEIGHT = 10;
     public Vec2 pos;
-    public double collideSize = 118;//碰撞体积
+    public double collideSize = 5/1.414;//碰撞体积
     public int life = 1000;//存活寿命，多少帧，寿命=0则active=false，存入子弹对象池
     public int frame = 0;//已存活的帧数
     public ITraceFunc traceFunc;//运动轨迹
-
     public @Deprecated
     Vec2 direction;//朝向方向 TODO
     Image image;
@@ -26,15 +25,16 @@ public class FixTraceBullet extends GameObject implements Drawable, Collidable {
         super();
         pos = new Vec2();
         image = new ImageIcon("C:\\Users\\dswxl\\Desktop\\remu.jpg").getImage();
+        active=false;
     }
 
     public FixTraceBullet(@NotNull Graphics g) {
-        super(g);
         pos = new Vec2();
         //"C:\\Users\\dswxl\\OneDrive\\图片\\本机照片\\TIM图片20181217232334.jpg"
         //TODO 将图片资源获取包装成类
         image = new ImageIcon("C:\\Users\\dswxl\\Desktop\\remu2.jpg").getImage();
         active = false;
+        graphics = g;
     }
 
     public Vec2 getPos() {
@@ -58,7 +58,7 @@ public class FixTraceBullet extends GameObject implements Drawable, Collidable {
 //            graphics.drawImage(image, (int) pos.x, (int) pos.y, imageWidth, imageHeight, null);
             graphics.setColor(Color.RED);
             graphics.fillOval((int) pos.x, (int) pos.y, IMAGE_WIDTH, IMAGE_HEIGHT);
-            pos = pos.add(traceFunc.getTrace(frame));
+            pos = pos.add(traceFunc.getTrace(frame).dot(v));
 
             frame++;
             //颜色恢复
@@ -81,8 +81,12 @@ public class FixTraceBullet extends GameObject implements Drawable, Collidable {
 
     @Override
     public void collideEvent(Collidable object) {
-        if (Constants.DEBUG)
-            DMKDebug.debugWatch(graphics, "collide", this);
+//        if (Constants.DEBUG)
+//            DMKDebug.debugWatch(graphics, "collide", this);
+        Color c = graphics.getColor();
+        graphics.setColor(Color.BLUE);
+        graphics.drawOval((int) object.getPos().x - 50, (int) object.getPos().y - 50, 100, 100);
+        graphics.setColor(c);
     }
 
     @Override

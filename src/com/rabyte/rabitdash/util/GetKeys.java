@@ -10,7 +10,7 @@ public class GetKeys {
     public boolean z;
     public boolean x;
     public boolean shift;
-    public boolean f12;
+    public boolean f12=false;
     public boolean esc;
 
     public GetKeys() {
@@ -34,10 +34,9 @@ public class GetKeys {
         if (i == 16)
             shift = true;
         if (i == 123)
-            f12 = true;
+            f12 = !f12;
         if (i == 27)
             esc = true;
-//        System.out.println("key pressed" + i);
     }
 
     public void keyReleased(int i) {
@@ -55,8 +54,8 @@ public class GetKeys {
             x = false;
         if (i == 16)
             shift = false;
-        if (i == 123)
-            f12 = false;
+//        if (i == 123)
+//            f12 = false;
         if (i == 27)
             esc = false;
 //        System.out.println("key released" + i);

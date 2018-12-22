@@ -1,5 +1,5 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="Rabbit-Danmuku-Demo:jar">
+  <artifact type="jar" build-on-make="true" name="Rabbit-Danmuku-Demo:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/Rabbit_Danmuku_Demo_jar</output-path>
     <root id="archive" name="Rabbit-Danmuku-Demo.jar">
       <element id="module-output" name="Rabbit-Danmuku-Demo" />

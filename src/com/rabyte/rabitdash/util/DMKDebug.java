@@ -3,22 +3,33 @@ package com.rabyte.rabitdash.util;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Vector;
 
 public class DMKDebug {
-    private static HashMap<Integer, String> hashMap = new HashMap<>();
+    private static HashMap<GameObject, String> hashMap = new HashMap<>();
 
     //o为调用debugWatch的对象自己
-    public static void debugWatch(Graphics g, String s, Object o) {
+    public static void debugWatch(Graphics g, String s, GameObject o) {
         int messageNum = 1;
-        hashMap.put(o.hashCode(), s);
+        if(o.isActive())
+            hashMap.put(o, s);
         Color c = g.getColor();
-        for (String str : hashMap.values()) {
+        //TODO
+        for(Iterator<HashMap.Entry<GameObject,String>> entryIterator = hashMap.entrySet().iterator();
+        entryIterator.hasNext();)
+        {
+            HashMap.Entry<GameObject,String> entry = entryIterator.next();
             g.setColor(Color.BLACK);
-            g.drawString(str+"@", Math.floorDiv(messageNum,10), 20 * messageNum);
-            messageNum++;
-//            System.out.println(messageNum);
+            if(entry.getKey().isActive()) {
+                g.drawString(entry.getValue(), Math.floorDiv(messageNum, 10), 20 * messageNum);
+                messageNum++;
+            }
+            else {
+                entryIterator.remove();
+            }
         }
+
         g.setColor(c);
     }
 }

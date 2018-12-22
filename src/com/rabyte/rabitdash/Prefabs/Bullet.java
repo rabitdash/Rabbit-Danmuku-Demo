@@ -5,13 +5,20 @@ import com.rabyte.rabitdash.Math.Vec2;
 import com.rabyte.rabitdash.util.Collidable;
 import com.rabyte.rabitdash.util.GameObject;
 
+import java.awt.*;
+
 public class Bullet extends GameObject implements Drawable, Collidable {
     public static int imageWidth = 10;
     public static int imageHeight = 10;
     public Vec2 pos;
-    public double collideSize = 114;//碰撞体积
+    public double collideSize = imageHeight/1.414;//碰撞体积
     public int life = 1000;//存活寿命，多少帧，寿命=0则active=false，存入子弹对象池
     public int frame = 0;//已存活的帧数
+    public double v;
+
+    Bullet() {
+        v = 1;
+    }
 
     //TODO 将绘图行为与运动计算分离
     @Override
