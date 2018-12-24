@@ -1,15 +1,16 @@
-package com.rabyte.rabitdash.util;
+package com.rabyte.rabitdash.Prefabs;
 
 
 import com.rabyte.rabitdash.Drawable;
 import com.rabyte.rabitdash.Math.Vec2;
+import com.rabyte.rabitdash.util.Collidable;
 
 import java.awt.*;
 
 public class GameObject implements Drawable, Collidable {
     //»æÖÆµÄ´°Ìå
     public static Graphics graphics;
-    public boolean active = false;
+    public boolean active = true;
 
     public GameObject() {
     }

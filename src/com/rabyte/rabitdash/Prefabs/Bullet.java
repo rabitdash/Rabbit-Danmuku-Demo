@@ -3,9 +3,6 @@ package com.rabyte.rabitdash.Prefabs;
 import com.rabyte.rabitdash.Drawable;
 import com.rabyte.rabitdash.Math.Vec2;
 import com.rabyte.rabitdash.util.Collidable;
-import com.rabyte.rabitdash.util.GameObject;
-
-import java.awt.*;
 
 public class Bullet extends GameObject implements Drawable, Collidable {
     public static int imageWidth = 10;
@@ -14,7 +11,7 @@ public class Bullet extends GameObject implements Drawable, Collidable {
     public double collideSize = imageHeight/1.414;//碰撞体积
     public int life = 1000;//存活寿命，多少帧，寿命=0则active=false，存入子弹对象池
     public int frame = 0;//已存活的帧数
-    public double v;
+    public double v = 1;
 
     Bullet() {
         v = 1;
@@ -37,7 +34,7 @@ public class Bullet extends GameObject implements Drawable, Collidable {
 
     @Override
     public void collideEvent(Collidable object) {
-
+        this.active = false;
     }
 
     @Override

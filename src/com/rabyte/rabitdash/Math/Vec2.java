@@ -75,7 +75,7 @@ public class Vec2 {
         if (this.matmul(b) >= 0) {
             return Math.acos(this.dot(b) / (this.len() * b.len()));
         } else {
-            return Math.acos(-this.dot(b) / (this.len() * b.len()));
+            return Math.PI*2 - Math.acos(this.dot(b) / (this.len() * b.len()));
         }
     }
 

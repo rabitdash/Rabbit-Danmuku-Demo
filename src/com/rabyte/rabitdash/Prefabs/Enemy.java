@@ -2,12 +2,11 @@ package com.rabyte.rabitdash.Prefabs;
 
 
 import com.rabyte.rabitdash.Math.Vec2;
-import com.rabyte.rabitdash.util.BulletPool;
-import com.rabyte.rabitdash.util.Collidable;
-import com.rabyte.rabitdash.util.ITraceFunc;
+import com.rabyte.rabitdash.util.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.util.Vector;
 
 public class Enemy extends Aircraft {
     public ITraceFunc traceFunc;
@@ -24,6 +23,7 @@ public class Enemy extends Aircraft {
         super(g);
         active=true;
         bulletPool=BulletPool.getInstance(g);
+        this.collideSize=12;
     }
 
     public Enemy(@NotNull Graphics g, Image image) {
@@ -31,13 +31,8 @@ public class Enemy extends Aircraft {
     }
 
     @Override
-    public boolean isCollide(Collidable object) {
-        return super.isCollide(object);
-    }
-
-    @Override
     public void collideEvent(Collidable object) {
-        super.collideEvent(object);
+        this.active = false;
     }
 
     @Override
@@ -57,6 +52,7 @@ public class Enemy extends Aircraft {
 
     @Override
     public void draw() {
+
         if (frame > life) {
             this.active = false;
         }
@@ -70,10 +66,50 @@ public class Enemy extends Aircraft {
             graphics.fillRect((int) pos.x, (int) pos.y, width, height);
             //颜色恢复
             graphics.setColor(c);
+            frame++;
         } else {
             frame++;
         }
 
+    }
+
+    public Vector<GameObject> shoot(Vec2 pos)
+    {
+        if(this.frame < 0)
+        {
+            return new Vector<>();
+        }
+        Vector<GameObject> res = new Vector<>();
+        //给了位置
+        Vector<FixTraceBullet> fixTraceBullets = bulletPool.getBullets(3);
+        int i = 0;
+
+        if(pos != null)
+        {
+            //自机狙
+            for (FixTraceBullet fixTraceBullet : fixTraceBullets) {
+                fixTraceBullet.setPos(this.getPos());
+                fixTraceBullet.traceFunc = new Trace.Linear(new Vec2(1, 0).angle(pos.minus(this.getPos())));
+                fixTraceBullet.life = 500;
+                fixTraceBullet.frame -= 40*i;
+                fixTraceBullet.v = 5;
+                i++;
+            }
+        }
+        else
+        {
+            for (FixTraceBullet fixTraceBullet: fixTraceBullets)
+            {
+                fixTraceBullet.setPos(this.getPos());
+                fixTraceBullet.traceFunc = new Trace.Linear(Math.toRadians(90));
+                fixTraceBullet.life = 1000;
+                fixTraceBullet.frame -= 20*i;
+                i++;
+            }
+        }
+
+        res.addAll(fixTraceBullets);
+        return res;
     }
 
 

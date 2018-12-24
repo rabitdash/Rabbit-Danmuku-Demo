@@ -2,22 +2,28 @@ package com.rabyte.rabitdash.Prefabs;
 
 import com.rabyte.rabitdash.Drawable;
 import com.rabyte.rabitdash.Math.Vec2;
-import com.rabyte.rabitdash.util.*;
+import com.rabyte.rabitdash.util.BulletPool;
+import com.rabyte.rabitdash.util.Collidable;
+import com.rabyte.rabitdash.util.GetKeys;
+import com.rabyte.rabitdash.util.Trace;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Vector;
 
-public class Player extends GameObject implements Drawable, Collidable {
+public class Player extends GameObject implements Drawable, Collidable, Runnable {
     public static final int IMAGE_WIDTH = 50;
     public static final int IMAGE_HEIGHT = 50;
     public static final double slowV = 0.5;//不按shift速度倍率
     public static final double moveV = 1.5;
     private static BulletPool bulletPool;
+    public int score = 0;
     public Vec2 pos;
     public double collideSize = 5;//碰撞体积
-    public int hitPoint = 5;
+    public int hitPoint = 5;//生命
+    public int bombNum = 3;//b数
+
     Image image;
 
     public Player(@NotNull Graphics g) {
@@ -29,8 +35,16 @@ public class Player extends GameObject implements Drawable, Collidable {
     }
 
     @Override
+    public void run() {
+        draw();
+    }
+
+    @Override
     public boolean isCollide(Collidable object) {
-        return false;
+        if (!this.active)
+            return false;
+        return this.getPos().minus(object.getPos()).len()
+                < Math.abs(this.getCollideSize() + object.getCollideSize());
     }
 
     @Override
@@ -61,12 +75,12 @@ public class Player extends GameObject implements Drawable, Collidable {
             //TODO
             Color c = graphics.getColor();
             graphics.setColor(Color.GREEN);
-            graphics.drawOval((int) (getPos().x-30), (int) (getPos().y-30), 60, 60);
+            graphics.drawOval((int) (getPos().x - 30), (int) (getPos().y - 30), 60, 60);
             graphics.setColor(c);
         }
     }
 
-    public void control(GetKeys getKeys) {
+    public void move(GetKeys getKeys) {
         Vec2 moveDirection = new Vec2();
         if (getKeys.down) {
             moveDirection = moveDirection.add(new Vec2(0, moveV));
@@ -91,7 +105,7 @@ public class Player extends GameObject implements Drawable, Collidable {
     }
 
     //TODO
-    public Vector<GameObject> shoot(Graphics g) {
+    public Vector<FixTraceBullet> shoot() {
         Vector<FixTraceBullet> fixTraceBullets = bulletPool.getBullets(3);
         int i = 0;
         for (FixTraceBullet fixTraceBullet : fixTraceBullets) {
@@ -100,6 +114,7 @@ public class Player extends GameObject implements Drawable, Collidable {
             fixTraceBullet.life = 100;
             fixTraceBullet.frame = 0;
             fixTraceBullet.v = 10;
+            fixTraceBullet.setActive(true);
             i++;
         }
         return new Vector<>(fixTraceBullets);

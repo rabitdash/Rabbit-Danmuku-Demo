@@ -1,12 +1,12 @@
 package com.rabyte.rabitdash.UI;
 
-import com.rabyte.rabitdash.Drawable;
-import com.rabyte.rabitdash.Math.Mat2;
+import com.rabyte.rabitdash.Math.Vec2;
+import com.rabyte.rabitdash.Prefabs.Enemy;
+import com.rabyte.rabitdash.Prefabs.FixTraceBullet;
+import com.rabyte.rabitdash.Prefabs.GameObject;
+import com.rabyte.rabitdash.Prefabs.Player;
 import com.rabyte.rabitdash.Stages.Stage;
 import com.rabyte.rabitdash.util.*;
-import com.rabyte.rabitdash.Math.Vec2;
-import com.rabyte.rabitdash.Prefabs.FixTraceBullet;
-import com.rabyte.rabitdash.Prefabs.Player;
 
 import javax.swing.*;
 import java.applet.Applet;
@@ -80,95 +80,157 @@ public class GamePanel extends Applet implements KeyListener, Runnable {
             iBuffer = createImage(this.getSize().width, this.getSize().height);
             gBuffer = iBuffer.getGraphics();
         }
-        if (Constants.DEBUG) {
+        Vector<Enemy> enemyAircraftObjects = new Vector<>();
+        Vector<GameObject> enemyBulletObjects = new Vector<>();
+        Vector<FixTraceBullet> friendlyObjects = new Vector<>();
+        Player p = new Player(gBuffer);
+        p.setPos(new Vec2(300, 500));
+        p.active = true;
+//        if (Constants.DEBUG) {
+        //bullet generation
+        GameObject gameO1 = new GameObject();
+        GameObject gameO2 = new GameObject();
+        GameObject gameO3 = new GameObject();
+        gameO1.setActive(true);
+        gameO2.setActive(true);
+        gameO3.setActive(true);
+//        }
+        //直接new一个Bullet对象绘制会有重绘问题
+        while (!getKeys.esc && frame < 2000 && p.hitPoint > 0) {
+            t1 = System.nanoTime();
+            gBuffer.setColor(getBackground());
+            gBuffer.fillRect(0, 0, this.getSize().width, this.getSize().height);
+            //
+            if (!getKeys.f12) {
+                enemyAircraftObjects.removeIf(gameObject -> !gameObject.isActive());
+                enemyBulletObjects.removeIf(gameObject -> !gameObject.isActive());
+                friendlyObjects.removeIf(gameObject -> !gameObject.isActive());
+                //TODO 写在渲染类里面
+                //非活动的子弹会从渲染队列中被移除
+                //TODO
+                enemyAircraftObjects.addAll(Stage.level1(gBuffer, frame, p.getPos()));
+                //防止敌机弹幕过密
+                if (frame % 20 == 1) {
+                    for (Enemy enemy : enemyAircraftObjects) {
 
-            Vector<GameObject> hostileObjects = new Vector<>();
-            Vector<GameObject> friendlyObjects = new Vector<>();
-            Player p = new Player(gBuffer);
-            p.setPos(new Vec2(400, 400));
-            p.active = true;
-            //bullet generation
-            GameObject gameO1 = new GameObject();
-            gameO1.setActive(true);
-            //直接new一个Bullet对象绘制会有重绘问题
-            //鬼知道发生了什么
-            //TODO 这里应是无限循环
-            while (true) {
+                        Vector<GameObject> enemyBullets = enemy.shoot(p.getPos());
+                        enemyBulletObjects.addAll(enemyBullets);
+                    }
+                }
 
-                t1 = System.nanoTime();
+                //冲了
+                if (getKeys.z && frame % 20 == 1) {
+                    //frame % 10 防止玩家弹幕过密
+                    Vector<FixTraceBullet> playerBullets = p.shoot();
+                    friendlyObjects.addAll(playerBullets);
+
+
+                }
+                if (getKeys.shift)
+                    if (!enemyAircraftObjects.isEmpty()) {
+                        int i = 0;
+                        for (FixTraceBullet fixTraceBullet : friendlyObjects) {
+                            if (fixTraceBullet.frame < 16)
+                                continue;
+                            fixTraceBullet.traceFunc = new Trace.Linear(new Vec2(1, 0).
+                                    angle(enemyAircraftObjects.get(0).getPos().minus(fixTraceBullet.getPos()))
+                                    + Math.toRadians(10 * (i - 1)));
+                            i++;
+
+                        }
+                    }
+                //放b TODO
+                if (getKeys.x && p.bombNum>0 && frame% 10 == 1) {
+                    for (GameObject bullet : enemyBulletObjects) {
+                        bullet.active = false;
+                    }
+                    p.score += enemyBulletObjects.size();
+                    p.bombNum--;
+                }
+
+                p.draw();
+                //collide start
+                for (GameObject enemy : enemyAircraftObjects) {
+                    enemy.draw();
+                    if (enemy.isCollide(p)) {
+                        enemy.collideEvent(null);
+                        p.collideEvent(enemy);
+                    }
+                }
+                for (GameObject bullet : friendlyObjects) {
+                    bullet.draw();
+                }
+                for (GameObject bullet : enemyBulletObjects) {
+                    bullet.draw();
+                    if (bullet.isCollide(p)) {
+                        bullet.collideEvent(null);
+                        p.collideEvent(bullet);
+                    }
+                }
+                for (GameObject enemy : enemyAircraftObjects) {
+                    for (GameObject bullet : friendlyObjects) {
+                        if (enemy.isCollide(bullet)) {
+                            enemy.collideEvent(null);
+                            bullet.collideEvent(null);
+                            p.score++;
+                        }
+                    }
+                }
+                //collide end
+                p.move(getKeys);
+                //在两个中间加渲染
+
+
+                frame++;
                 t2 = System.nanoTime(); //游戏循环执行后的系统时间，单位：毫秒
                 dt = (t2 - t1) / 1000000L;  //计算本次循环实际花费的时间，单位：毫秒
                 sleepTime = period - dt;//计算本次循环实剩余的时间，单位：毫秒
-                //双缓冲 start
-                gBuffer.setColor(getBackground());
-                gBuffer.fillRect(0, 0, this.getSize().width, this.getSize().height);
-                //
-                if (!getKeys.f12) {
-                    if (Constants.DEBUG) {
-                        //TODO 写在渲染类里面
-                        //非活动的子弹会从渲染队列中被移除
-                        //TODO
-                        //draw start
-                        p.draw();
-
-                        hostileObjects.addAll(Stage.level1(gBuffer, frame, p.getPos()));
-                        //冲了
-                        if (getKeys.z && frame % 20 == 1) {
-                            //frame % 10 防止玩家弹幕过密
-                            friendlyObjects.addAll(p.shoot(gBuffer));
-                        }
-                        if (getKeys.x) {
-                            hostileObjects.clear();
-                        }
-                        if (!hostileObjects.isEmpty()) {
-                            for (GameObject bullet : hostileObjects) {
-                                bullet.draw();
-                                if (bullet.isCollide(p)) {
-                                    bullet.active = false;
-                                    p.collideEvent(bullet);
-                                }
-                            }
-
-                        }
-                        for (GameObject bullet : friendlyObjects) {
-                            bullet.draw();
-                        }
-                        hostileObjects.removeIf(gameObject -> !gameObject.isActive());
-                        friendlyObjects.removeIf(gameObject -> !gameObject.isActive());
-//                        DMKDebug.debugWatch(gBuffer, "存活子弹数：" + BulletPool.getActiveBullet(), p);
-                        DMKDebug.debugWatch(gBuffer, "HP:" + p.hitPoint, p);
-                        DMKDebug.debugWatch(gBuffer, "存活对象数：" + hostileObjects.size(), gameO1);
-
-
-                        //draw end
-                        //collide start
-
-                        //collide end
-                        p.control(getKeys);
-//                    System.out.println("frame:"+frame);
-
-                        //在两个中间加渲染
-
-                    }
-
-
-                    frame++;
-
-                    if (sleepTime <= 0) {        //防止sleepTime为负数
-                        sleepTime = 1;
-                    }
-                    try {
-                        System.out.println(frame);
-                        Thread.sleep(sleepTime);
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                    //update
-                    g.drawImage(iBuffer, 0, 0, this);
-                    //双缓冲 end
+                if (sleepTime <= 0) {        //防止sleepTime为负数
+                    sleepTime = 1;
                 }
-
+                try {
+                    System.out.println(frame);
+                    Thread.sleep(sleepTime);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+                if (Constants.DEBUG) {
+                    DMKDebug.debugWatch(gBuffer, "HP:" + p.hitPoint, p);
+                    DMKDebug.debugWatch(gBuffer, "Score:s" + p.score, gameO1);
+                    DMKDebug.debugWatch(gBuffer,"Time:" + (2000-frame),gameO2);
+                    DMKDebug.debugWatch(gBuffer, "Bomb:" + p.bombNum, gameO3);
+                }
+                //update
+                g.drawImage(iBuffer, 0, 0, null);
+                //双缓冲 end
             }
+
         }
+        int retry = 0;
+        while (retry < 3) {
+            if (RankList.insert(JOptionPane.showInputDialog("输入你的姓名"), p.score))
+                retry = 3;
+            else
+                JOptionPane.showMessageDialog(null, "Something happend, please retry");
+            retry++;
+        }
+        JFrame rankFrame = new JFrame("RankList");
+        rankFrame.setContentPane(new RankPanel().panel1);
+        rankFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //窗口居中
+        rankFrame.setBounds(
+                (int) (Toolkit.getDefaultToolkit()
+                        .getScreenSize()
+                        .getWidth()
+                        - Constants.WINDOW_WIDTH) / 2,
+                (int) (Toolkit.getDefaultToolkit()
+                        .getScreenSize()
+                        .getHeight()
+                        - Constants.WINDOW_HEIGHT) / 2,
+                Constants.WINDOW_WIDTH,
+                Constants.WINDOW_HEIGHT);
+//        frame.add(new BakPanel());
+        rankFrame.setVisible(true);
     }
+
 }

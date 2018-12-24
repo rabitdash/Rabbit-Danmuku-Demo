@@ -15,7 +15,7 @@ public class BulletPool {
     ;
     private static BulletPool _instance = null;
     private static Graphics graphics;
-    private int bulletNum = 1000;//子弹对象池的大小
+    private int bulletNum = 4000;//子弹对象池的大小
     //singleton
 
     private BulletPool() {
@@ -48,6 +48,9 @@ public class BulletPool {
                 fixTraceBullets) {
             if (!e.active) {
                 e.active = true;
+                e.life=600;
+                e.frame=0;
+                e.v = 1;
                 return e;
             }
         }
@@ -55,6 +58,9 @@ public class BulletPool {
             for (FixTraceBullet e : fixTraceBullets) {
                 if (!e.active) {
                     e.active = true;
+                    e.life=600;
+                    e.frame=0;
+                    e.v = 1;
                     return e;
                 }
             }
@@ -69,9 +75,12 @@ public class BulletPool {
                 fixTraceBullets) {
                 if (!e.active && fixTraceBulletVector.size() < bulletNum) {
                     e.active = true;
+                    e.life=600;
+                    e.frame=0;
+                    e.v = 1;
                     fixTraceBulletVector.add(e);
                 } else if(fixTraceBulletVector.size() == bulletNum) {
-                    System.out.println(fixTraceBulletVector.size());
+//                    System.out.println(fixTraceBulletVector.size());
                     return fixTraceBulletVector;
             }
         }
@@ -81,6 +90,9 @@ public class BulletPool {
                 if (!e.active) {
                     if (fixTraceBulletVector.size() < bulletNum) {
                         e.active = true;
+                        e.frame=0;
+                        e.life=600;
+                        e.v = 1;
                         fixTraceBulletVector.add(e);
                     } else {
                         return fixTraceBulletVector;

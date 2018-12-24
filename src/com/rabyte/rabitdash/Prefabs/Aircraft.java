@@ -3,7 +3,6 @@ package com.rabyte.rabitdash.Prefabs;
 import com.rabyte.rabitdash.Drawable;
 import com.rabyte.rabitdash.Math.Vec2;
 import com.rabyte.rabitdash.util.Collidable;
-import com.rabyte.rabitdash.util.GameObject;
 import com.rabyte.rabitdash.util.GetKeys;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,7 +38,10 @@ public class Aircraft extends GameObject implements Drawable, Collidable {
 
     @Override
     public boolean isCollide(Collidable object) {
-        return false;
+        if (!this.active)
+            return false;
+        return this.getPos().minus(object.getPos()).len()
+                < Math.abs(this.getCollideSize() + object.getCollideSize());
     }
 
     @Override
@@ -65,11 +67,6 @@ public class Aircraft extends GameObject implements Drawable, Collidable {
     }
 
     public void control(GetKeys getKeys) {
-    }
-
-    public void shoot()
-    {
-
     }
 }
 

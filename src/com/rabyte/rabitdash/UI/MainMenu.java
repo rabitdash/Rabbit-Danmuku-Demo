@@ -4,6 +4,8 @@ import com.rabyte.rabitdash.util.Constants;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -33,23 +35,10 @@ public class MainMenu {
                 gamePanel.setVisible(true);
                 gamePanel.start();
                 gamePanel.requestFocus();
-//                System.out.println(gamePanel.requestFocusInWindow());
             }
         });
 
-    }
 
-    private static void initBakImage() {
-//        mainBak = new ImageIcon(getClass().getResource("/resources/images/mainBak.jpg"))
-//                .getImage()
-//                .getScaledInstance(Constants.WINDOW_WIDTH,
-//                        Constants.WINDOW_HEIGHT,
-//                        Image.SCALE_DEFAULT);
-        Image mainBak = new ImageIcon("C:\\Users\\dswxl\\Desktop\\remu2.jpg")
-                .getImage()
-                .getScaledInstance(Constants.WINDOW_WIDTH,
-                        Constants.WINDOW_HEIGHT,
-                        Image.SCALE_DEFAULT);
     }
 
     public static void main(String[] args) {
@@ -57,7 +46,6 @@ public class MainMenu {
 //        frame.setContentPane(new GamePanel());
         frame.setContentPane(new MainMenu().panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         //´°¿Ú¾ÓÖÐ
         frame.setBounds(
                 (int) (Toolkit.getDefaultToolkit()
@@ -72,7 +60,6 @@ public class MainMenu {
                 Constants.WINDOW_HEIGHT);
 //        frame.add(new BakPanel());
         frame.setVisible(true);
-
         jf = new JFrame("Gaming");
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gamePanel = new GamePanel();
@@ -84,6 +71,26 @@ public class MainMenu {
                 Constants.WINDOW_HEIGHT);
 //        gamePanel.setVisible(true);
 //        jf.setVisible(true);
+        jf.addComponentListener(new ComponentListener() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {
+
+            }
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+            }
+        });
 
 
     }
@@ -103,29 +110,43 @@ public class MainMenu {
         panel1.setBackground(new Color(-1507841));
         panel1.setOpaque(false);
         panel1.setVisible(true);
-        bakPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+        bakPanel.setLayout(new BorderLayout(0, 0));
         bakPanel.setEnabled(false);
         bakPanel.setVisible(true);
         panel1.add(bakPanel, "Card1");
         final JPanel panel2 = new JPanel();
-        panel2.setLayout(new GridBagLayout());
+        panel2.setLayout(new BorderLayout(0, 0));
         panel2.setOpaque(false);
-        bakPanel.add(panel2);
-        exitButton = new JButton();
-        exitButton.setText("Exit");
+        bakPanel.add(panel2, BorderLayout.CENTER);
+        final JPanel panel3 = new JPanel();
+        panel3.setLayout(new GridBagLayout());
+        panel3.setOpaque(false);
+        panel2.add(panel3, BorderLayout.SOUTH);
+        final JPanel spacer1 = new JPanel();
         GridBagConstraints gbc;
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(exitButton, gbc);
+        panel3.add(spacer1, gbc);
+        final JPanel spacer2 = new JPanel();
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.fill = GridBagConstraints.VERTICAL;
+        panel3.add(spacer2, gbc);
+        exitButton = new JButton();
+        exitButton.setText("Exit");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 2;
+        gbc.gridy = 1;
+        panel3.add(exitButton, gbc);
         startButton = new JButton();
         startButton.setText("Start");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(startButton, gbc);
+        gbc.gridy = 1;
+        panel3.add(startButton, gbc);
     }
 
     /**
