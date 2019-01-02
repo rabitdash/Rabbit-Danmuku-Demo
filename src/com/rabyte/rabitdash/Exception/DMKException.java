@@ -1,5 +1,7 @@
 package com.rabyte.rabitdash.Exception;
 
+import javax.swing.*;
+
 public class DMKException extends Exception {
     DMKException() {
         super();
@@ -11,6 +13,6 @@ public class DMKException extends Exception {
 
     @Override
     public void printStackTrace() {
-        super.printStackTrace();
+        JOptionPane.showMessageDialog(null, this.getMessage());
     }
 }

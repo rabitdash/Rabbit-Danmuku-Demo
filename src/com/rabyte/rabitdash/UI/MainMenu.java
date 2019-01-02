@@ -43,7 +43,7 @@ public class MainMenu {
 
     public static void main(String[] args) {
         frame = new JFrame("MainMenu");
-//        frame.setContentPane(new GamePanel());
+//        existFrame.setContentPane(new GamePanel());
         frame.setContentPane(new MainMenu().panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //´°¿Ú¾ÓÖÐ
@@ -58,7 +58,7 @@ public class MainMenu {
                         - Constants.WINDOW_HEIGHT) / 2,
                 Constants.WINDOW_WIDTH,
                 Constants.WINDOW_HEIGHT);
-//        frame.add(new BakPanel());
+//        existFrame.add(new BakPanel());
         frame.setVisible(true);
         jf = new JFrame("Gaming");
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -1,15 +1,14 @@
 package com.rabyte.rabitdash.util;
 
-import com.rabyte.rabitdash.Drawable;
-import com.rabyte.rabitdash.Prefabs.FixTraceBullet;
+import com.rabyte.rabitdash.Prefabs.Bullet.FixTraceBullet;
 
 import java.awt.*;
 import java.util.Vector;
 
 //子弹对象池
 public class BulletPool {
-    private static final int MAX_BULLET_NUM = 10000;//最大子弹数
-    private static final int INCREASE_SIZE = 1000; //空间不足时增加n个子弹对象
+    private static final int MAX_BULLET_NUM = 100000;//最大子弹数
+    private static final int INCREASE_SIZE = 3000; //空间不足时增加n个子弹对象
     public static Vector<FixTraceBullet> fixTraceBullets = new Vector<FixTraceBullet>();
     public static int count = 0;
     ;

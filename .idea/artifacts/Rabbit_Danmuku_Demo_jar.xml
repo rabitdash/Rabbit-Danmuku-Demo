@@ -6,6 +6,7 @@
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/annotations-16.0.2.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/3rdParty/MariaDB Connector J/2.2.1/mariadb-java-client-2.2.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/3rdParty/Universal Tween Engine/tween-engine-api.jar" path-in-jar="/" />
+      <element id="module-source" name="Rabbit-Danmuku-Demo" />
     </root>
   </artifact>
 </component>

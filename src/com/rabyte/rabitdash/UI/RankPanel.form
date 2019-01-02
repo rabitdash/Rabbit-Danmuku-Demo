@@ -14,7 +14,10 @@
         <children>
           <component id="71c92" class="javax.swing.JTable" binding="table1" custom-create="true" default-binding="true">
             <constraints/>
-            <properties/>
+            <properties>
+              <focusable value="true"/>
+              <font size="14"/>
+            </properties>
             <clientProperties>
               <html.disable class="java.lang.Boolean" value="true"/>
               <terminateEditOnFocusLost class="java.lang.Boolean" value="true"/>

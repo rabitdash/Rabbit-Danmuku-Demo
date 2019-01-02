@@ -1,6 +1,5 @@
 package com.rabyte.rabitdash.UI;
 
-import com.rabyte.rabitdash.util.Constants;
 import com.rabyte.rabitdash.util.RankList;
 
 import javax.swing.*;
@@ -8,17 +7,17 @@ import java.awt.*;
 import java.util.Vector;
 
 public class RankPanel {
-    private JTable table1;
     public JPanel panel1;
+    private JTable table1;
 
     private void createUIComponents() {
         Vector<String> columnNames = new Vector<>();
-        columnNames.add("NAME");
-        columnNames.add("SCORE");
-        Vector<Vector<String>> a = new Vector();
-        a.addAll(RankList.getRankList());
-        table1 = new JTable(a, columnNames);
-        // TODO: place custom component creation code here
+        Vector<Vector<String>> columnDatas = new Vector();
+        columnNames.add("ÐÕÃû");
+        columnNames.add("·ÖÊý");
+
+        columnDatas.addAll(RankList.getRankList());
+        table1 = new JTable(columnDatas, columnNames);
     }
 
     {
@@ -41,9 +40,31 @@ public class RankPanel {
         panel1.setLayout(new BorderLayout(0, 0));
         final JScrollPane scrollPane1 = new JScrollPane();
         panel1.add(scrollPane1, BorderLayout.NORTH);
+        table1.setFocusable(true);
+        Font table1Font = this.$$$getFont$$$(null, -1, 14, table1.getFont());
+        if (table1Font != null) table1.setFont(table1Font);
         table1.putClientProperty("html.disable", Boolean.TRUE);
         table1.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
         scrollPane1.setViewportView(table1);
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont) {
+        if (currentFont == null) return null;
+        String resultName;
+        if (fontName == null) {
+            resultName = currentFont.getName();
+        } else {
+            Font testFont = new Font(fontName, Font.PLAIN, 10);
+            if (testFont.canDisplay('a') && testFont.canDisplay('1')) {
+                resultName = fontName;
+            } else {
+                resultName = currentFont.getName();
+            }
+        }
+        return new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
     }
 
     /**

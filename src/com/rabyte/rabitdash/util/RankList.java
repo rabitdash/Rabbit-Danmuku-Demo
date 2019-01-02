@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.sql.*;
 import java.util.Vector;
 
-//为了凑课设的数据库要求强行弄出的排行榜
 public class RankList {
     //字符串数组，存储信息
     Connection con;
@@ -74,12 +73,10 @@ public class RankList {
         return i;
     }
 
-    public static int delete(String name) {
-        if (name.length() > 3)
-            name = name.substring(0, 3);
+    public static int delete() {
         Connection conn = getConn();
         int i = 0;
-        String sql = "delete from dmk.ranklist where name='" + name + "'";
+        String sql = "delete from dmk.ranklist where name not in (select name from dmk.ranklist order by score desc limit 10)";
         PreparedStatement pstmt;
         try {
             pstmt = conn.prepareStatement(sql);
@@ -94,7 +91,8 @@ public class RankList {
     }
 
     public static Vector<Vector<String>> getRankList() {
-
+        //保留前十名
+//        delete();
         Connection conn = getConn();
         String sql = "select * from dmk.ranklist ORDER BY score DESC ";
         ResultSet resultSet = null;

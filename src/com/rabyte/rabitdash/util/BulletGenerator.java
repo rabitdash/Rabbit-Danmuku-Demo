@@ -1,8 +1,7 @@
 package com.rabyte.rabitdash.util;
 
 import com.rabyte.rabitdash.Math.Vec2;
-import com.rabyte.rabitdash.Prefabs.Bullet;
-import com.rabyte.rabitdash.Prefabs.FixTraceBullet;
+import com.rabyte.rabitdash.Prefabs.Bullet.FixTraceBullet;
 import com.rabyte.rabitdash.Prefabs.GameObject;
 
 import java.util.Vector;

@@ -1,13 +1,14 @@
 package com.rabyte.rabitdash.Prefabs;
 
 
-import com.rabyte.rabitdash.Drawable;
+
+import com.rabyte.rabitdash.components.Drawable;
 import com.rabyte.rabitdash.Math.Vec2;
 import com.rabyte.rabitdash.util.Collidable;
 
 import java.awt.*;
 
-public class GameObject implements Drawable, Collidable {
+public class GameObject implements Collidable, Drawable {
     //»æÖÆµÄ´°Ìå
     public static Graphics graphics;
     public boolean active = true;
@@ -19,10 +20,6 @@ public class GameObject implements Drawable, Collidable {
         graphics = g;
     }
 
-    @Override
-    public void draw() {
-
-    }
 
     @Override
     public int hashCode() {
@@ -57,5 +54,10 @@ public class GameObject implements Drawable, Collidable {
     }
 
     public void setPos(Vec2 pos) {
+    }
+
+    @Override
+    public void draw() {
+
     }
 }
